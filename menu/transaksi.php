@@ -121,6 +121,7 @@
                                         <td>' . $d['nama_barang'] . ' </td>
                                         <td>' . $d['nama_supplier'] . '</td>
                                         <td class="text-center">' . number_format($d['qty']) . '</td>
+                                        <td>' . $d['tipe'] . '</td>
                                         <td>Rp ' . number_format($d['harga'], 0, ',', '.') . '</td>
                                         <td>Rp ' . number_format($d['subtotal'], 0, ',', '.') . '</td>
                                         <td>Rp ' . number_format($d['profit'], 0, ',', '.') . '</td>
@@ -150,6 +151,7 @@
                                                         <th>Barang</th>
                                                         <th>Supplier</th>
                                                         <th>Qty</th>
+                                                        <th>Tipe</th>
                                                         <th>Harga</th>
                                                         <th>Subtotal</th>
                                                         <th>Profit</th>

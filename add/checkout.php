@@ -115,6 +115,7 @@ while ($data = mysqli_fetch_assoc($keranjang)) {
             harga,
             subtotal,
             modal,
+            tipe,
             profit
 
         )
@@ -127,6 +128,7 @@ while ($data = mysqli_fetch_assoc($keranjang)) {
             '$harga_jual',
             '$subtotal',
             '$modal_total',
+            '$tipe_jual',
             '$profit'
 
         )
