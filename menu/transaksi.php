@@ -103,33 +103,53 @@
                             </tr>
                         <?php
                             $detail = mysqli_query($conn, "
-                                SELECT 
-                                    dt.*,
-                                    b.nama_barang,
-                                    s.nama_supplier
-                                FROM detail_transaksi dt
-                                JOIN barang b
-                                ON dt.id_barang = b.id_barang
-                                LEFT JOIN supplier s
-                                ON b.id_supplier = s.id_supplier
-                                WHERE dt.id_transaksi = '$data[id_transaksi]'
+                                        SELECT
+
+                                            dt.*,
+
+                                            b.nama_barang,
+
+                                            b.modal as modal_perpcs,
+
+                                            s.nama_supplier
+
+                                        FROM detail_transaksi dt
+
+                                        JOIN barang b
+                                        ON dt.id_barang = b.id_barang
+
+                                        LEFT JOIN supplier s
+                                        ON b.id_supplier = s.id_supplier
+
+                                        WHERE dt.id_transaksi = '$data[id_transaksi]'
                             ");
                             $detailRows = '';
+                            $totalPendapatan = 0;
+                            $totalModal = 0;
+                            $totalProfit = 0;
                             while ($d = mysqli_fetch_assoc($detail)) {
+                                $modal_total = $d['modal_perpcs'] * $d['qty'];
+
+                                $totalPendapatan += $d['subtotal'];
+                                $totalModal += $modal_total;
+                                $totalProfit += $d['profit'];
+
                                 $detailRows .= '
                                     <tr>
                                         <td>' . $d['nama_barang'] . ' </td>
                                         <td>' . $d['nama_supplier'] . '</td>
+                                        <td>Rp ' . number_format($d['harga'], 0, ',', '.') . '</td>
+                                        <td>Rp ' . number_format($d['modal_perpcs'], 0, ',', '.') . '</td>
                                         <td class="text-center">' . number_format($d['qty']) . '</td>
                                         <td>' . $d['tipe'] . '</td>
-                                        <td>Rp ' . number_format($d['harga'], 0, ',', '.') . '</td>
                                         <td>Rp ' . number_format($d['subtotal'], 0, ',', '.') . '</td>
+                                        <td>Rp ' . number_format($modal_total, 0, ',', '.') . '</td>
                                         <td>Rp ' . number_format($d['profit'], 0, ',', '.') . '</td>
                                     </tr>
                                 ';
                             }
                             $modal .= '
-                            <div class="modal fade"
+                            <div class="modal fade" 
                                 id="detail' . $data['id_transaksi'] . '"
                                 tabindex="-1">
                                 <div class="modal-dialog modal-lg">
@@ -150,16 +170,34 @@
                                                     <tr class="text-center">
                                                         <th>Barang</th>
                                                         <th>Supplier</th>
+                                                        <th>Harga</th>
+                                                        <th>Modal</th>
                                                         <th>Qty</th>
                                                         <th>Tipe</th>
-                                                        <th>Harga</th>
                                                         <th>Subtotal</th>
+                                                        <th>Submodal</th>
                                                         <th>Profit</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     ' . $detailRows . '
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr class="bg-light font-weight-bold">
+                                                        <td colspan="6" class="text-center">
+                                                            TOTAL
+                                                        </td>
+                                                        <td>
+                                                            Rp ' . number_format($totalPendapatan, 0, ',', '.') . '
+                                                        </td>
+                                                        <td>
+                                                            Rp ' . number_format($totalModal, 0, ',', '.') . '
+                                                        </td>
+                                                        <td class="text-success">
+                                                            Rp ' . number_format($totalProfit, 0, ',', '.') . '
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
